@@ -9,7 +9,6 @@ class Payment < ApplicationRecord
     self.stripe_id = response.id
   end
   def get_token
-    debugger
     token = Stripe::Token.create({
       card: {
         number: number,

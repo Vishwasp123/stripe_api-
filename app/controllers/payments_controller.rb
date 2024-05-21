@@ -1,18 +1,18 @@
 class PaymentsController < ApplicationController
     skip_before_action :verify_authenticity_token
   
-    # GET /payments
+  
     def index
       @payments = Payment.all
       render json: @payments
     end
   
-    # GET /payments/:id
+   
     def show
       render json: @payment
     end
   
-    # POST /payments
+   
     def create
       debugger
      order= Order.find(params[:payment][:order_id])
@@ -26,7 +26,7 @@ class PaymentsController < ApplicationController
       end
     end
   
-    # PATCH/PUT /payments/:id
+   
     def update
       if @payment.update(payment_params)
         render json: @payment
@@ -35,7 +35,7 @@ class PaymentsController < ApplicationController
       end
     end
   
-    # DELETE /payments/:id
+  
     def destroy
       debugger
       @payment = Payment.find(params[:payment][:id])

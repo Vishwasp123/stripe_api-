@@ -1,0 +1,185 @@
+openapi: 3.0.3
+info:
+  title: API V1
+  version: v1
+paths:
+  /orders:
+    post:
+      summary: Create order
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '422':
+          description: Invalid request
+    get:
+      summary: List orders
+      tags:
+        - Orders
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+  /payments:
+    get:
+      summary: List payments
+      tags:
+        - Payments
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+    post:
+      summary: Create payment
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInput'
+      responses:
+        '201':
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '422':
+          description: Invalid request
+  /payments/{id}:
+    get:
+      summary: Show payment
+      tags:
+        - Payments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '404':
+          description: Payment not found
+    patch:
+      summary: Update payment
+      tags:
+        - Payments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInput'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '422':
+          description: Invalid request
+    delete:
+      summary: Delete payment
+      tags:
+        - Payments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Payment not found
+components:
+  schemas:
+    OrderInput:
+      type: object
+      properties:
+        amount_cents:
+          type: integer
+        payment_method:
+          type: string
+        customer_id:
+          type: integer
+      required:
+        - amount_cents
+        - payment_method
+        - customer_id
+    PaymentInput:
+      type: object
+      properties:
+        order_id:
+          type: integer
+        number:
+          type: string
+        exp_month:
+          type: integer
+        exp_year:
+          type: integer
+        cvc:
+          type: string
+      required:
+        - order_id
+        - number
+        - exp_month
+        - exp_year
+        - cvc
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        amount_cents:
+          type: integer
+        payment_method:
+          type: string
+        customer_id:
+          type: integer
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+        order_id:
+          type: integer
+        stripe_id:
+          type: string
